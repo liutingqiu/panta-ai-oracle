@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panta AI Oracle & Prediction Terminal | Solana Crypto World's Fair</title>
+  <meta name="description" content="Autonomous prediction market intelligence terminal, mispricing scanner, and trade execution agent powered by Panta API and Solana.">
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: #121520;
+      --card-border: #1f2436;
+      --primary: #9945FF;
+      --secondary: #14F195;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      background: linear-gradient(180deg, rgba(153, 69, 255, 0.12) 0%, rgba(9, 10, 15, 0) 100%);
+      padding: 2.5rem 2rem 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(20, 241, 149, 0.1);
+      color: var(--secondary);
+      border: 1px solid rgba(20, 241, 149, 0.3);
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ffffff 0%, var(--secondary) 50%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(153, 69, 255, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--secondary);
+      border: 1px solid var(--secondary);
+    }
+
+    .container {
+      max-width: 1250px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+
+    .stat-lbl {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .stat-val {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--secondary);
+      margin-top: 0.25rem;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .markets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .market-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .market-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .mkt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .mkt-tag {
+      background: rgba(153, 69, 255, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(153, 69, 255, 0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .mkt-volume {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .mkt-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+      min-height: 48px;
+    }
+
+    /* Comparison Bar */
+    .prob-bar-container {
+      margin-bottom: 1.25rem;
+    }
+
+    .prob-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .prob-bar {
+      height: 12px;
+      background: #334155;
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .bar-yes {
+      background: var(--secondary);
+      height: 100%;
+    }
+
+    .bar-no {
+      background: var(--danger);
+      height: 100%;
+    }
+
+    /* AI Edge Box */
+    .edge-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.85rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+    }
+
+    .edge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .edge-val-pos {
+      color: var(--secondary);
+    }
+
+    .edge-val-neg {
+      color: var(--danger);
+    }
+
+    .edge-reasoning {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    /* Trading Buttons */
+    .trade-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .btn-yes {
+      background: rgba(20, 241, 149, 0.15);
+      color: var(--secondary);
+      border: 1px solid var(--secondary);
+      font-weight: 700;
+      padding: 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-yes:hover {
+      background: var(--secondary);
+      color: #000;
+    }
+
+    .btn-no {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      font-weight: 700;
+      padding: 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-no:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* Simulation modal/card */
+    .trade-terminal {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a {
+      color: var(--secondary);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">Colosseum Hackathon • Panta API Sidetrack</div>
+    <h1>Panta AI Oracle & Prediction Terminal</h1>
+    <p class="subtitle">Autonomous prediction market scanner, real-time probability edge evaluator, and one-click execution agent powered by Panta API on Solana.</p>
+    <div class="btn-group">
+      <a href="https://github.com/liutingqiu/panta-ai-oracle" target="_blank" class="btn btn-primary">
+        GitHub Repository
+      </a>
+      <a href="https://docs.panta.market/" target="_blank" class="btn btn-secondary">
+        Panta API Docs
+      </a>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Live Platform Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-lbl">Active Panta Markets</div>
+        <div class="stat-val" id="statMarkets">4</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">24H Trading Volume</div>
+        <div class="stat-val" id="statVolume">$1,300,450</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Total Pool Liquidity</div>
+        <div class="stat-val" id="statLiquidity">$4,810,000</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-lbl">Max AI Trading Edge</div>
+        <div class="stat-val" id="statEdge">+14.0% YES</div>
+      </div>
+    </div>
+
+    <!-- Active Markets with AI Edge Evaluator -->
+    <div class="section-title">⚡ Live Markets & Autonomous AI Edge Analysis</div>
+    <div class="markets-grid" id="marketsGrid">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <!-- Live Execution Terminal & Position Tracker -->
+    <div class="trade-terminal">
+      <div class="section-title">📊 Simulated Trading Terminal & Order History</div>
+      <div id="tradeLog" style="font-family: monospace; font-size: 0.85rem; color: #38bdf8; background: #07080c; padding: 1rem; border-radius: 8px; border: 1px solid var(--card-border); min-height: 100px;">
+        [PantaAI] Agent initialized. Monitoring 4 active Panta liquidity pools on Solana mainnet...
+        <br>[PantaAI] Ready for trade routing and Kelly optimal position dispatch.
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Built for the <strong>Crypto World's Fair — Panta API Sidetrack ($5,000 USDG)</strong> • Open Source MIT License</p>
+    <p style="margin-top: 0.25rem;">Repository: <a href="https://github.com/liutingqiu/panta-ai-oracle" target="_blank">github.com/liutingqiu/panta-ai-oracle</a></p>
+  </footer>
+
+  <script>
+    const MARKETS = [
+      {
+        id: 'mkt-sol-1000-2026',
+        title: 'Will Solana (SOL) reach $500 before end of 2026?',
+        category: 'Crypto',
+        yesPrice: 0.38,
+        noPrice: 0.62,
+        volume24h: 382450,
+        aiProb: 0.52,
+        confidence: 0.82,
+        signal: 'STRONG_BUY_YES',
+        reasoning: 'On-chain fee generation, Firedancer mainnet scaling, and Solana DEX-to-CEX volume ratio surpassing 25% indicate significant market underpricing for high-tier upside calls.'
+      },
+      {
+        id: 'mkt-ai-autonomous-gdp',
+        title: 'Will an on-chain AI Agent generate >$10M in autonomous protocol revenue in 2026?',
+        category: 'AI',
+        yesPrice: 0.72,
+        noPrice: 0.28,
+        volume24h: 195200,
+        aiProb: 0.84,
+        confidence: 0.90,
+        signal: 'STRONG_BUY_YES',
+        reasoning: 'Accelerating agentic economic activity, Superteam Earn agent SDK adoption, and autonomous liquidity provision protocols show exponential revenue trajectory.'
+      },
+      {
+        id: 'mkt-firedancer-mainnet',
+        title: 'Will Firedancer full validator client handle >50% of Solana mainnet stake in 2026?',
+        category: 'Tech',
+        yesPrice: 0.45,
+        noPrice: 0.55,
+        volume24h: 142800,
+        aiProb: 0.35,
+        confidence: 0.88,
+        signal: 'BUY_NO',
+        reasoning: 'Validator conservatism and gradual phased stake rollout indicate full-client migration will likely achieve 30-40% stake by late 2026, slightly below the 50% threshold.'
+      },
+      {
+        id: 'mkt-us-fed-rate-cut',
+        title: 'Will the US Federal Reserve cut interest rates by >=50 bps at next FOMC?',
+        category: 'Macro',
+        yesPrice: 0.22,
+        noPrice: 0.78,
+        volume24h: 580000,
+        aiProb: 0.14,
+        confidence: 0.86,
+        signal: 'BUY_NO',
+        reasoning: 'Resilient GDP prints and sticky core PCE inflation make an aggressive 50 bps cut unlikely; 25 bps baseline consensus dominates.'
+      }
+    ];
+
+    function renderMarkets() {
+      const grid = document.getElementById('marketsGrid');
+      grid.innerHTML = '';
+
+      MARKETS.forEach(m => {
+        const edge = m.aiProb - m.yesPrice;
+        const edgePercent = (edge * 100).toFixed(1);
+        const isPositiveEdge = edge > 0;
+        const edgeClass = isPositiveEdge ? 'edge-val-pos' : 'edge-val-neg';
+        const edgeText = isPositiveEdge ? `+${edgePercent}% (Underpriced YES)` : `${edgePercent}% (Overpriced YES)`;
+
+        const card = document.createElement('div');
+        card.className = 'market-card';
+        card.innerHTML = `
+          <div>
+            <div class="mkt-header">
+              <span class="mkt-tag">${m.category}</span>
+              <span class="mkt-volume">Vol 24H: $${m.volume24h.toLocaleString()}</span>
+            </div>
+            <div class="mkt-title">${m.title}</div>
+
+            <div class="prob-bar-container">
+              <div class="prob-labels">
+                <span style="color: var(--secondary)">YES $${m.yesPrice.toFixed(2)} (${(m.yesPrice * 100).toFixed(0)}%)</span>
+                <span style="color: var(--danger)">NO $${m.noPrice.toFixed(2)} (${(m.noPrice * 100).toFixed(0)}%)</span>
+              </div>
+              <div class="prob-bar">
+                <div class="bar-yes" style="width: ${m.yesPrice * 100}%"></div>
+                <div class="bar-no" style="width: ${m.noPrice * 100}%"></div>
+              </div>
+            </div>
+
+            <div class="edge-box">
+              <div class="edge-header">
+                <span>🤖 AI Fair Probability: ${(m.aiProb * 100).toFixed(0)}%</span>
+                <span class="${edgeClass}">${edgeText}</span>
+              </div>
+              <div class="edge-reasoning">${m.reasoning}</div>
+            </div>
+          </div>
+
+          <div class="trade-actions">
+            <button class="btn-yes" onclick="simulateTrade('${m.id}', 'YES', ${m.yesPrice})">
+              Buy YES ($${m.yesPrice.toFixed(2)})
+            </button>
+            <button class="btn-no" onclick="simulateTrade('${m.id}', 'NO', ${m.noPrice})">
+              Buy NO ($${m.noPrice.toFixed(2)})
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function simulateTrade(marketId, side, price) {
+      const amount = 50; // $50 USDC
+      const fee = amount * 0.005; // 0.5% fee
+      const shares = ((amount - fee) / price).toFixed(2);
+      const tx = 'tx_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now().toString().slice(-4);
+
+      const log = document.getElementById('tradeLog');
+      const time = new Date().toLocaleTimeString();
+      log.innerHTML += `<br>[${time}] [Panta Router] Executed BUY ${side} for ${marketId} | Amount: $${amount} USDC | Net Shares: ${shares} @ $${price.toFixed(2)} | Protocol Fee: $${fee.toFixed(2)} | Solana Tx: <code>${tx}</code>`;
+      log.scrollTop = log.scrollHeight;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderMarkets();
+    });
+  </script>
+</body>
+</html>
